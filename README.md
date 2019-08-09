@@ -29,3 +29,32 @@ curl_setopt($ch, CURLOPT_URL, 'https://somesite.com/index/login');
 curl_setopt($ch, CURLOPT_POSTFIELDS, $login_data);
 $result = curl_exec($ch);
 $data = json_decode($result,true);
+
+        $start = " 00:00:00";
+        $end = " 23:59:59";
+        $today = date('Y-m-d');
+
+        if($date == 'today'){
+            return [$today.$start, $today.$end];
+        }else if($date == 'yesterday'){
+            $tomorrow = date('Y-m-d',strtotime($today . "-1 days"));
+            return [$tomorrow.$start, $tomorrow.$end];
+        }else if($date == 'thisweek'){
+            $this_week_start = strtotime('-1 week monday 00:00:00');
+            $this_week_end = strtotime('sunday 23:59:59');
+            return [date('Y-m-d H:i:s', $this_week_start), date('Y-m-d H:i:s', $this_week_end)];
+        }else if($date == 'prevweek'){
+            $last_week_start = strtotime('-2 week monday 00:00:00');
+            $last_week_end = strtotime('-1 week sunday 23:59:59');
+            return [date('Y-m-d H:i:s', $last_week_start), date('Y-m-d H:i:s', $last_week_end)];
+        }else if($date == 'thismonth'){
+            $this_manth_start = strtotime('first day of this month 00:00:00');
+            $this_manth_end = strtotime('this month 23:59:59');
+            return [date('Y-m-d H:i:s', $this_manth_start), date('Y-m-d H:i:s', $this_manth_end)];
+        }else if($date == 'prevmonth'){
+            $last_manth_start = strtotime('-1 month first day of this month 00:00:00');
+            $last_manth_end = strtotime('-1 month last day of this month 23:59:59');
+            return [date('Y-m-d H:i:s', $last_manth_start), date('Y-m-d H:i:s', $last_manth_end)];
+        }else if($date == 'alltime') {
+            return ['2018-01-01'.$start, $today];
+        }
